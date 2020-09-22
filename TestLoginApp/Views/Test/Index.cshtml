@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    
+}
+
+
+<h2>Index</h2>
+
+<form id ="loginform">
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div>
+ 
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+  
+<script>
+    $("#loginform").submit(function (event) {
+        event.preventDefault();
+        //ftiagnoume me vasi to modelo poy dexetai ws eisodo i sunartisi tis metavlites mas prokeimenoy na tis kanoume serialize 
+        //Sto fakelo Models exei to string mail kai to string password tha akolouthisoume kai edw tin idia akrivws morfi opote
+        var username = $("#exampleInputEmail1").val();
+        var password = $("#exampleInputPassword1").val();
+
+        //wra na kanoume json kai meta stringfy tin pliroforia gia na tin dextei h sunartisi mias kai milame gia ena temporary json 
+        //stin ousia poy 8a metaferei ta dedomena sti sinartisi
+        var beforeserialize = { username: username, password: password };
+        var data = JSON.stringify({ 'model': beforeserialize }); //pada to teliko json me to key opws edw to model prepei na einai idio me to key pou dexetai i sunartisi model kai to head to json 8a legetai model
+
+        //telos kaloume to ajax pou 8a kalesei tin sunartisi mas
+                                                    //SHMEIWSH POLY SYMANTIKO//
+        /*Gia na kleithei opoiadipote sunartisi se opoiodoipote controller 8a prepei na grafei me tin eksis logiki
+         =>Url.Action("OnomaSynartisis","Onona Controller", ("Proeteretiko kommati ama theloyme na perasoyme kati mesw url"); Xrhsimopoioume to prothema papaki gia na grapsoume c# mesa sto Razor Page*/
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("LoginUser", "Test")', //H sunartisi pou legame 8a tis steiloume ta data
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function(data) {  //8a epistrepsoume ena json me ena success kai 8a einai true/false analoga me to ama perase to login 
+                if (data.success == true)
+                   alert("success");
+                else
+                    alert("Ο συνδιασμός Ονόματος/Συνθηματικού δεν είναι σωστός");
+                $("#progress").hide();
+            }
+        });
+    });
+</script>
